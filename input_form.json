@@ -1,0 +1,71 @@
+{
+    "id": null,
+    "form": {
+        "fields": [
+            {
+                "id": 0.12994321158723876,
+                "key": "h171",
+                "type": "h1",
+                "className": "formlytemplate__h1",
+                "templateOptions": {
+                    "label": "Input parameters",
+                    "iconUrl": "assets/svg/lb_title.svg",
+                    "editMode": true,
+                    "readonly": true,
+                    "required": false,
+                    "placeholder": "Add a Title",
+                    "templateTitle": "Title"
+                }
+            },
+            {
+                "id": 0.14485984138423613,
+                "key": "photon_energy",
+                "type": "lbInput",
+                "className": "formlytemplate_textHalf",
+                "templateOptions": {
+                    "unit": "eV",
+                    "focus": false,
+                    "label": "Photon Energy",
+                    "iconUrl": "assets/svg/lb_textinput.svg",
+                    "options": [
+                        {
+                            "name": "1486.6",
+                            "value": "1486.6"
+                        },
+                        {
+                            "name": "1246.9",
+                            "value": "1246.9"
+                        }
+                    ],
+                    "disabled": false,
+                    "editMode": true,
+                    "readonly": true,
+                    "required": false,
+                    "inputWidth": "medium",
+                    "placeholder": "",
+                    "templateTitle": "Medium text box"
+                }
+            },
+            {
+                "id": 0.10948060577018914,
+                "key": "reference_peaks",
+                "type": "lbTextarea",
+                "className": "formlytemplate_textDescription",
+                "templateOptions": {
+                    "focus": false,
+                    "label": "Reference Peaks",
+                    "iconUrl": "assets/svg/ic_keyboard_48px.svg",
+                    "disabled": false,
+                    "editMode": true,
+                    "readonly": true,
+                    "required": false,
+                    "placeholder": "",
+                    "templateTitle": "Text area"
+                }
+            }
+        ]
+    },
+    "name": "New Template",
+    "owner": null,
+    "user_default": false
+}
