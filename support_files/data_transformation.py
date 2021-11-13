@@ -1,20 +1,26 @@
 
+import pickle
 import numpy as np
 import math
 
-def aggregate_to_sample_data(sample, data_list, name='xps'):
-    import pickle
+def aggregate_to_sample_data(sample, data_list, name='xps',  x_sampling=None):
+    if x_sampling is None: 
+        x_sampling = np.linspace(0,1000,2000)
+
     if sample.aggregated_data:
         path = sample.aggregated_data.path
         with open(path, 'rb') as fd:
             data_obj = pickle.load(fd)
-            agg_data = data_obj[name]
-    else:
+            agg_data = data_obj.get(name, None)
+    else:        
         path ="/tmp/aggregated_data.pkl"
-        x = np.linspace(0,1000,2000)
+        data_obj = {}
+        agg_data = None
+
+    if agg_data is None:
+        x = x_sampling 
         y = np.zeros(len(x))
         agg_data = np.vstack((x,y)).transpose()
-        data_obj = {}
 
     for data in data_list:
         data = data[data[:, 0].argsort()] # sort array by x for np.interp
@@ -26,7 +32,7 @@ def aggregate_to_sample_data(sample, data_list, name='xps'):
     with open(path, 'wb') as fd:
         pickle.dump(data_obj,fd)
         
-    return agg_data, path
+    return data_obj, path
         
 
 def GAF_transform(serie):

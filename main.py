@@ -1,6 +1,7 @@
 ##  Required imports
 import matplotlib; matplotlib.use('Agg')
 import sdesk
+import os
 from VAMAS import parseVAMAS, extract_vamas_data_and_meta
 from data_transformation import aggregate_to_sample_data, convert_data_layers_to_img, GAF_transform
 import numpy as np
@@ -67,6 +68,10 @@ def main():
 
     # LOAD INPUT FILES OR SAMPLES
     input_file = process.input_files[0] 
+    filename, file_extension = os.path.splitext(input_file.properties['name']) 
+    if file_extension.lower() not in ['.vms', '.vamas']:
+        """ STOP AND DO NOTHING """
+        return 0
     
     # LOAD PARAMETERS FROM USER INPUT FORM
     input_form = process.arguments 
@@ -140,16 +145,22 @@ def main():
     # Aggregate data to sample and output for visualization
     linked_subject = input_file.subject
     if linked_subject:
-        agg_data, path = aggregate_to_sample_data(linked_subject, [o['data'] for o in output_files])
+        data_obj, path = aggregate_to_sample_data(linked_subject, [o['data'] for o in output_files], 'xps')
         linked_subject.save_as_aggregated_data(path)
     
-        sdesk_output_file = process.create_output_file("aggregated_table.txt")
-        sdesk.write_tsv_file(sdesk_output_file.path, ['energy', 'yield'], agg_data)
+        sdesk_output_file = process.create_output_file("aggregated_xps_table.txt")
+        sdesk.write_tsv_file(sdesk_output_file.path, ['energy', 'yield'], data_obj['xps'])
         
-        gaf_data, phi, scaled_serie = GAF_transform(agg_data[:,1])
-        img = convert_data_layers_to_img(gaf_data, gaf_data, gaf_data*0)
+        gaf_xps, _, _ = GAF_transform(data_obj['xps'][:,1])
+        
+        if data_obj.get('xps', None) is not None:
+            gaf_eels,  _, _ = GAF_transform(data_obj['eels'][:,1])
+        else:
+            gaf_eels = np.zeros(gaf_xps.shape)
+               
 
-        aggregated_output_file = process.create_output_file("GAF.jpeg")
+        img = convert_data_layers_to_img(gaf_xps, gaf_eels, gaf_eels*0)
+        aggregated_output_file = process.create_output_file(f"GAF_sample_{linked_subject.uid}.jpeg")
         img.save(aggregated_output_file.path)
 
 
