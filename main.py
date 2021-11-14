@@ -153,7 +153,7 @@ def main():
         
         gaf_xps, _, _ = GAF_transform(data_obj['xps'][:,1])
         
-        if data_obj.get('xps', None) is not None:
+        if data_obj.get('eels', None) is not None:
             gaf_eels,  _, _ = GAF_transform(data_obj['eels'][:,1])
         else:
             gaf_eels = np.zeros(gaf_xps.shape)
